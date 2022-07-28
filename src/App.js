@@ -44,7 +44,7 @@ const filling = [
     flavors: ['Vanilla', 'Chocolate', 'Banana'],
   },
 ];
-const frosting = [
+const frostings = [
   {
     type: 'American Buttercream',
     flavors: ['Vanilla', 'Chocolate', 'Lemon', 'Strawberry'],
@@ -66,6 +66,39 @@ const frosting = [
 const toppings = ['Sprinkles', 'White Chocolate Drip', 'Chocolate Drip'];
 const size = ['Dozen (12)', 'Half Dozen (6)'];
 
+const Flavors = () => {
+  let test = flavors.map((flavor, index) => (
+    <option key={index} value={flavor}>
+      {flavor}
+    </option>
+  ));
+  return (
+    <div>
+      <label>Flavor</label>
+      <Field name="Flavor" component="select">
+        {test}
+      </Field>
+      <Error name="Flavor" />
+    </div>
+  );
+};
+
+const Frosting = () => {
+  let test = frostings.map((frosting, index) => (
+    <option key={index} value={frosting.type}>
+      {frosting.type}
+    </option>
+  ));
+  return (
+    <div>
+      <label>Frosting</label>
+      <Field name="Frosting" component="select">
+        {test}
+      </Field>
+      <Error name="Frosting" />
+    </div>
+  );
+};
 export default function App() {
   return (
     <Styles>
@@ -78,66 +111,12 @@ export default function App() {
         Notice the mixture of field-level and record-level (or{' '}
         <em>page-level</em> in this case) validation.
       </p>
-      <Wizard
-        initialValues={{ employed: true, stooge: 'larry' }}
-        onSubmit={onSubmit}
-      >
+      <Wizard initialValues={{}} onSubmit={onSubmit}>
         <Wizard.Page>
-          <div>
-            <label>First Name</label>
-            <Field
-              name="firstName"
-              component="input"
-              type="text"
-              placeholder="First Name"
-              validate={required}
-            />
-            <Error name="firstName" />
-          </div>
-          <div>
-            <label>Last Name</label>
-            <Field
-              name="lastName"
-              component="input"
-              type="text"
-              placeholder="Last Name"
-              validate={required}
-            />
-            <Error name="lastName" />
-          </div>
+          <Flavors />
         </Wizard.Page>
-        <Wizard.Page
-          validate={(values) => {
-            const errors = {};
-            if (!values.email) {
-              errors.email = 'Required';
-            }
-            if (!values.favoriteColor) {
-              errors.favoriteColor = 'Required';
-            }
-            return errors;
-          }}
-        >
-          <div>
-            <label>Email</label>
-            <Field
-              name="email"
-              component="input"
-              type="email"
-              placeholder="Email"
-            />
-            <Error name="email" />
-          </div>
-          <div>
-            <label>Favorite Color</label>
-            <Field name="favoriteColor" component="select">
-              <option />
-              <option value="#ff0000">❤️ Red</option>
-              <option value="#00ff00">💚 Green</option>
-              <option value="#0000ff">💙 Blue</option>
-            </Field>
-            <Error name="favoriteColor" />
-          </div>
+        <Wizard.Page>
+          <Frosting />
         </Wizard.Page>
         <Wizard.Page
           validate={(values) => {
