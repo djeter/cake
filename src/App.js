@@ -67,146 +67,153 @@ const toppings = ['Sprinkles', 'White Chocolate Drip', 'Chocolate Drip'];
 const size = ['Dozen (12)', 'Half Dozen (6)'];
 
 export default function App() {
-  <Styles>
-    <h1>🏁 React Final Form Example</h1>
-    <h2>Wizard Form</h2>
-    <a href="https://github.com/erikras/react-final-form#-react-final-form">
-      Read Docs
-    </a>
-    <p>
-      Notice the mixture of field-level and record-level (or <em>page-level</em>{' '}
-      in this case) validation.
-    </p>
-    <Wizard
-      initialValues={{ employed: true, stooge: 'larry' }}
-      onSubmit={onSubmit}
-    >
-      <Wizard.Page>
-        <div>
-          <label>First Name</label>
-          <Field
-            name="firstName"
-            component="input"
-            type="text"
-            placeholder="First Name"
-            validate={required}
-          />
-          <Error name="firstName" />
-        </div>
-        <div>
-          <label>Last Name</label>
-          <Field
-            name="lastName"
-            component="input"
-            type="text"
-            placeholder="Last Name"
-            validate={required}
-          />
-          <Error name="lastName" />
-        </div>
-      </Wizard.Page>
-      <Wizard.Page
-        validate={(values) => {
-          const errors = {};
-          if (!values.email) {
-            errors.email = 'Required';
-          }
-          if (!values.favoriteColor) {
-            errors.favoriteColor = 'Required';
-          }
-          return errors;
-        }}
+  return (
+    <Styles>
+      <h1>🏁 React Final Form Example</h1>
+      <h2>Wizard Form</h2>
+      <a href="https://github.com/erikras/react-final-form#-react-final-form">
+        Read Docs
+      </a>
+      <p>
+        Notice the mixture of field-level and record-level (or{' '}
+        <em>page-level</em> in this case) validation.
+      </p>
+      <Wizard
+        initialValues={{ employed: true, stooge: 'larry' }}
+        onSubmit={onSubmit}
       >
-        <div>
-          <label>Email</label>
-          <Field
-            name="email"
-            component="input"
-            type="email"
-            placeholder="Email"
-          />
-          <Error name="email" />
-        </div>
-        <div>
-          <label>Favorite Color</label>
-          <Field name="favoriteColor" component="select">
-            <option />
-            <option value="#ff0000">❤️ Red</option>
-            <option value="#00ff00">💚 Green</option>
-            <option value="#0000ff">💙 Blue</option>
-          </Field>
-          <Error name="favoriteColor" />
-        </div>
-      </Wizard.Page>
-      <Wizard.Page
-        validate={(values) => {
-          const errors = {};
-          if (!values.toppings) {
-            errors.toppings = 'Required';
-          } else if (values.toppings.length < 2) {
-            errors.toppings = 'Choose more';
-          }
-          return errors;
-        }}
-      >
-        <div>
-          <label>Employed?</label>
-          <Field name="employed" component="input" type="checkbox" />
-        </div>
-        <div>
-          <label>Toppings</label>
-          <Field name="toppings" component="select" multiple>
-            <option value="ham">🐷 Ham</option>
-            <option value="mushrooms">🍄 Mushrooms</option>
-            <option value="cheese">🧀 Cheese</option>
-            <option value="chicken">🐓 Chicken</option>
-            <option value="pineapple">🍍 Pinapple</option>
-          </Field>
-          <Error name="toppings" />
-        </div>
-      </Wizard.Page>
-      <Wizard.Page
-        validate={(values) => {
-          const errors = {};
-          if (!values.notes) {
-            errors.notes = 'Required';
-          }
-          return errors;
-        }}
-      >
-        <div>
-          <label>Best Stooge?</label>
+        <Wizard.Page>
           <div>
-            <label>
-              <Field
-                name="stooge"
-                component="input"
-                type="radio"
-                value="larry"
-              />{' '}
-              Larry
-            </label>
-            <label>
-              <Field name="stooge" component="input" type="radio" value="moe" />{' '}
-              Moe
-            </label>
-            <label>
-              <Field
-                name="stooge"
-                component="input"
-                type="radio"
-                value="curly"
-              />{' '}
-              Curly
-            </label>
+            <label>First Name</label>
+            <Field
+              name="firstName"
+              component="input"
+              type="text"
+              placeholder="First Name"
+              validate={required}
+            />
+            <Error name="firstName" />
           </div>
-        </div>
-        <div>
-          <label>Notes</label>
-          <Field name="notes" component="textarea" placeholder="Notes" />
-          <Error name="notes" />
-        </div>
-      </Wizard.Page>
-    </Wizard>
-  </Styles>;
+          <div>
+            <label>Last Name</label>
+            <Field
+              name="lastName"
+              component="input"
+              type="text"
+              placeholder="Last Name"
+              validate={required}
+            />
+            <Error name="lastName" />
+          </div>
+        </Wizard.Page>
+        <Wizard.Page
+          validate={(values) => {
+            const errors = {};
+            if (!values.email) {
+              errors.email = 'Required';
+            }
+            if (!values.favoriteColor) {
+              errors.favoriteColor = 'Required';
+            }
+            return errors;
+          }}
+        >
+          <div>
+            <label>Email</label>
+            <Field
+              name="email"
+              component="input"
+              type="email"
+              placeholder="Email"
+            />
+            <Error name="email" />
+          </div>
+          <div>
+            <label>Favorite Color</label>
+            <Field name="favoriteColor" component="select">
+              <option />
+              <option value="#ff0000">❤️ Red</option>
+              <option value="#00ff00">💚 Green</option>
+              <option value="#0000ff">💙 Blue</option>
+            </Field>
+            <Error name="favoriteColor" />
+          </div>
+        </Wizard.Page>
+        <Wizard.Page
+          validate={(values) => {
+            const errors = {};
+            if (!values.toppings) {
+              errors.toppings = 'Required';
+            } else if (values.toppings.length < 2) {
+              errors.toppings = 'Choose more';
+            }
+            return errors;
+          }}
+        >
+          <div>
+            <label>Employed?</label>
+            <Field name="employed" component="input" type="checkbox" />
+          </div>
+          <div>
+            <label>Toppings</label>
+            <Field name="toppings" component="select" multiple>
+              <option value="ham">🐷 Ham</option>
+              <option value="mushrooms">🍄 Mushrooms</option>
+              <option value="cheese">🧀 Cheese</option>
+              <option value="chicken">🐓 Chicken</option>
+              <option value="pineapple">🍍 Pinapple</option>
+            </Field>
+            <Error name="toppings" />
+          </div>
+        </Wizard.Page>
+        <Wizard.Page
+          validate={(values) => {
+            const errors = {};
+            if (!values.notes) {
+              errors.notes = 'Required';
+            }
+            return errors;
+          }}
+        >
+          <div>
+            <label>Best Stooge?</label>
+            <div>
+              <label>
+                <Field
+                  name="stooge"
+                  component="input"
+                  type="radio"
+                  value="larry"
+                />{' '}
+                Larry
+              </label>
+              <label>
+                <Field
+                  name="stooge"
+                  component="input"
+                  type="radio"
+                  value="moe"
+                />{' '}
+                Moe
+              </label>
+              <label>
+                <Field
+                  name="stooge"
+                  component="input"
+                  type="radio"
+                  value="curly"
+                />{' '}
+                Curly
+              </label>
+            </div>
+          </div>
+          <div>
+            <label>Notes</label>
+            <Field name="notes" component="textarea" placeholder="Notes" />
+            <Error name="notes" />
+          </div>
+        </Wizard.Page>
+      </Wizard>
+    </Styles>
+  );
 }
