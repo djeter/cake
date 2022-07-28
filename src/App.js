@@ -34,7 +34,7 @@ const flavors = [
   'Cinnamon Swirl',
   'Lemon',
 ];
-const filling = [
+const fillings = [
   {
     type: 'Fruit',
     flavors: ['Strawberry', 'Blueberry', 'Raspberry', 'Peach', 'Pineapple'],
@@ -74,7 +74,7 @@ const Size = () => {
   ));
   return (
     <div>
-      <label>Size</label>
+      <label>Number of Cupcakes</label>
       <Field name="Size" component="select">
         <option value="">Select One</option>
         {test}
@@ -116,6 +116,45 @@ const Frosting = () => {
         {test}
       </Field>
       <Error name="Frosting" />
+    </div>
+  );
+};
+
+const Filling = () => {
+  let test = fillings.map((filling, index) => (
+    <option key={index} value={filling.type}>
+      {filling.type}
+    </option>
+  ));
+  return (
+    <div>
+      <label>Filling</label>
+      <Field
+        name="Filling"
+        component="select"
+      >
+        <option value="">Select One</option>
+        {test}
+      </Field>
+      <Error name="Filling" />
+    </div>
+  );
+};
+
+const Topping = () => {
+  let test = toppings.map((topping, index) => (
+    <option key={index} value={topping}>
+      {topping}
+    </option>
+  ));
+  return (
+    <div>
+      <label>Topping</label>
+      <Field name="Topping" component="select">
+        <option value="">Select One</option>
+        {test}
+      </Field>
+      <Error name="Topping" />
     </div>
   );
 };
@@ -173,17 +212,15 @@ export default function App() {
           <Flavors />
         </Wizard.Page>
         <Wizard.Page>
+          <Filling />
+        </Wizard.Page>
+        <Wizard.Page>
           <Frosting />
         </Wizard.Page>
-        <Wizard.Page
-          validate={(values) => {
-            const errors = {};
-            if (!values.notes) {
-              errors.notes = 'Required';
-            }
-            return errors;
-          }}
-        >
+        <Wizard.Page>
+          <Topping />
+        </Wizard.Page>
+        <Wizard.Page>
           <div>
             <label>Notes</label>
             <Field name="notes" component="textarea" placeholder="Notes" />
