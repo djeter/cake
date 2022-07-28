@@ -64,7 +64,25 @@ const frostings = [
   { type: 'Cream Cheese' },
 ];
 const toppings = ['Sprinkles', 'White Chocolate Drip', 'Chocolate Drip'];
-const size = ['Dozen (12)', 'Half Dozen (6)'];
+const sizes = ['Dozen (12)', 'Half Dozen (6)'];
+
+const Size = () => {
+  let test = sizes.map((size, index) => (
+    <option key={index} value={size}>
+      {size}
+    </option>
+  ));
+  return (
+    <div>
+      <label>Size</label>
+      <Field name="Size" component="select">
+        <option value="">Select One</option>
+        {test}
+      </Field>
+      <Error name="Size" />
+    </div>
+  );
+};
 
 const Flavors = () => {
   let test = flavors.map((flavor, index) => (
@@ -76,6 +94,7 @@ const Flavors = () => {
     <div>
       <label>Flavor</label>
       <Field name="Flavor" component="select">
+        <option value="">Select One</option>
         {test}
       </Field>
       <Error name="Flavor" />
@@ -92,7 +111,8 @@ const Frosting = () => {
   return (
     <div>
       <label>Frosting</label>
-      <Field name="Frosting" component="select" onchange={alert('changed')}>
+      <Field name="Frosting" component="select">
+        <option value="">Select One</option>
         {test}
       </Field>
       <Error name="Frosting" />
@@ -110,6 +130,7 @@ const FrostingFlavor = () => {
     <div>
       <label>Frosting Flavor</label>
       <Field name="FrostingFlavor" component="select">
+        <option value="">Select One</option>
         {test}
       </Field>
       <Error name="FrostingFlavor" />
@@ -119,48 +140,40 @@ const FrostingFlavor = () => {
 export default function App() {
   return (
     <Styles>
-      <h1>🏁 React Final Form Example</h1>
-      <h2>Wizard Form</h2>
-      <a href="https://github.com/erikras/react-final-form#-react-final-form">
-        Read Docs
-      </a>
+      <h1>Delicious N’ Sweet</h1>
+      <h2>Cupcake Wizard Form</h2>
       <p>
-        Notice the mixture of field-level and record-level (or{' '}
-        <em>page-level</em> in this case) validation.
+        Please follow the steps in the wizard to build your perfect cupcake!
       </p>
       <Wizard initialValues={{}} onSubmit={onSubmit}>
-        <Wizard.Page>
-          <Flavors />
-        </Wizard.Page>
-        <Wizard.Page>
-          <Frosting />
-        </Wizard.Page>
         <Wizard.Page
           validate={(values) => {
             const errors = {};
-            if (!values.toppings) {
-              errors.toppings = 'Required';
-            } else if (values.toppings.length < 2) {
-              errors.toppings = 'Choose more';
+            if (!values.Size) {
+              errors.Size = 'Required';
+            } else if (values.Size.length < 1) {
+              errors.Size = 'Choose more';
             }
             return errors;
           }}
         >
-          <div>
-            <label>Employed?</label>
-            <Field name="employed" component="input" type="checkbox" />
-          </div>
-          <div>
-            <label>Toppings</label>
-            <Field name="toppings" component="select" multiple>
-              <option value="ham">🐷 Ham</option>
-              <option value="mushrooms">🍄 Mushrooms</option>
-              <option value="cheese">🧀 Cheese</option>
-              <option value="chicken">🐓 Chicken</option>
-              <option value="pineapple">🍍 Pinapple</option>
-            </Field>
-            <Error name="toppings" />
-          </div>
+          <Size />
+        </Wizard.Page>
+        <Wizard.Page
+          validate={(values) => {
+            const errors = {};
+            if (!values.Flavor) {
+              errors.Flavor = 'Required';
+            } else if (values.Flavor.length < 1) {
+              errors.Flavor = 'Choose more';
+            }
+            return errors;
+          }}
+        >
+          <Flavors />
+        </Wizard.Page>
+        <Wizard.Page>
+          <Frosting />
         </Wizard.Page>
         <Wizard.Page
           validate={(values) => {
@@ -171,38 +184,6 @@ export default function App() {
             return errors;
           }}
         >
-          <div>
-            <label>Best Stooge?</label>
-            <div>
-              <label>
-                <Field
-                  name="stooge"
-                  component="input"
-                  type="radio"
-                  value="larry"
-                />{' '}
-                Larry
-              </label>
-              <label>
-                <Field
-                  name="stooge"
-                  component="input"
-                  type="radio"
-                  value="moe"
-                />{' '}
-                Moe
-              </label>
-              <label>
-                <Field
-                  name="stooge"
-                  component="input"
-                  type="radio"
-                  value="curly"
-                />{' '}
-                Curly
-              </label>
-            </div>
-          </div>
           <div>
             <label>Notes</label>
             <Field name="notes" component="textarea" placeholder="Notes" />
