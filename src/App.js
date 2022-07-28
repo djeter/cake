@@ -92,10 +92,27 @@ const Frosting = () => {
   return (
     <div>
       <label>Frosting</label>
-      <Field name="Frosting" component="select">
+      <Field name="Frosting" component="select" onchange={alert('changed')}>
         {test}
       </Field>
       <Error name="Frosting" />
+    </div>
+  );
+};
+
+const FrostingFlavor = () => {
+  let test = frostings.map((frosting, index) => (
+    <option key={index} value={frosting.type}>
+      {frosting.type}
+    </option>
+  ));
+  return (
+    <div>
+      <label>Frosting Flavor</label>
+      <Field name="FrostingFlavor" component="select">
+        {test}
+      </Field>
+      <Error name="FrostingFlavor" />
     </div>
   );
 };
