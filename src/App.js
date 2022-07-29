@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import './style.css';
 import Styles from './Styles';
 import { Field } from 'react-final-form';
 import Wizard from './Wizard';
+import createDecorator from 'final-form-calculate'
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -75,33 +76,54 @@ const sizes = [
 ];
 
 export default function App() {
-  let [updatedPrice, setUpdatedPrice] = useState(0);
+  let [updatedPrice, setUpdatedPrice] = useState(230);
+
+
+const calculator = createDecorator(
+  {
+    field: 'minimum', // when minimum changes...
+    updates: {
+      // ...update maximum to the result of this function
+      maximum: (minimumValue, allValues) =>
+        Math.max(minimumValue || 0, allValues.maximum || 0)
+    }
+  },
+  {
+    field: 'maximum', // when maximum changes...
+    updates: {
+      // update minimum to the result of this function
+      minimum: (maximumValue, allValues) =>
+        Math.min(maximumValue || 0, allValues.minimum || 0)
+    }
+  },
+  {
+    field: /day\[\d\]/, // when a field matching this pattern changes...
+    updates: {
+      // ...update the total to the result of this function
+      Price: (ignoredValue, allValues) =>
+        (allValues.Size || [])
+          .reduce((sum, value) => sum + Number(value || 0), 0)
+    }
+  }
+)
 
   const Size = () => {
-    let test = sizes.map((size, index) => (
-      <option
-        key={index}
-        value={size.amount}
-        onChange={(size) => {size}}
-      >
+    let cakeSizes = sizes.map((size, index) => (
+      <option key={index} value={size.amount}>
         {size.amount}
       </option>
     ));
     return (
       <div>
         <label>Number of Cupcakes</label>
-        <Field name="Size" component="select">
-          <option value="">Select One</option>
-          {test}
-        </Field>
         <Field
-          name="Price"
-          component="input"
-          type="text"
-          value={updatedPrice}
-          validate={required}
-          disabled
-        />
+          name="Size"
+          component="select"
+          onChange={() => setUpdatedPrice()}
+        >
+        <option value="">Select One</option>
+          {cakeSizes}
+        </Field>
         <Error name="Size" />
       </div>
     );
@@ -203,7 +225,7 @@ export default function App() {
       <p>
         Please follow the steps in the wizard to build your perfect cupcake!
       </p>
-      <Wizard initialValues={{}} onSubmit={onSubmit}>
+      <Wizard initialValues={} onSubmit={onSubmit}>
         <Wizard.Page
           validate={(values) => {
             const errors = {};
