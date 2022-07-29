@@ -12,11 +12,6 @@ const onSubmit = async (values) => {
   window.alert(JSON.stringify(values, 0, 2));
 };
 
-const updatePrice = async (values) => {
-  await sleep(300);
-  window.alert(values);
-};
-
 const Error = ({ name }) => (
   <Field
     name={name}
@@ -107,9 +102,13 @@ const calculator = createDecorator(
   }
 )
 
+const updatePrice = (values) => {
+  console.log(values.target.dataset.price);
+};
+
   const Size = () => {
     let cakeSizes = sizes.map((size, index) => (
-      <option key={index} value={size.amount}>
+      <option key={index} value={size.amount} data-price={size.price}>
         {size.amount}
       </option>
     ));
@@ -119,7 +118,7 @@ const calculator = createDecorator(
         <Field
           name="Size"
           component="select"
-          onChange={() => setUpdatedPrice()}
+          onChange={test => updatePrice(test)}
         >
         <option value="">Select One</option>
           {cakeSizes}
