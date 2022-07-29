@@ -82,7 +82,7 @@ export default function App() {
       <option
         key={index}
         value={size.amount}
-        onChange={(size) => console.log(size)}
+        onChange={(size) => {size}}
       >
         {size.amount}
       </option>
