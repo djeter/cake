@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Form } from 'react-final-form';
+import createDecorator from 'final-form-calculate';
 
 export default class Wizard extends React.Component {
   static propTypes = {
@@ -44,6 +45,7 @@ export default class Wizard extends React.Component {
     const { page } = this.state;
     const isLastPage = page === React.Children.count(children) - 1;
     if (isLastPage) {
+      window.alert(JSON.stringify(values, 0, 2));
     } else {
       this.next(values);
     }

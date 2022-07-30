@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react';
 import './style.css';
 import Styles from './Styles';
-import { Field } from 'react-final-form';
+import { Form, Field } from 'react-final-form';
 import Wizard from './Wizard';
-import createDecorator from 'final-form-calculate'
+import createDecorator from 'final-form-calculate';
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -21,7 +21,6 @@ const Error = ({ name }) => (
     }
   />
 );
-
 const required = (value) => (value ? undefined : 'Required');
 
 const flavors = [
@@ -39,10 +38,12 @@ const fillings = [
   {
     type: 'Fruit',
     flavors: ['Strawberry', 'Blueberry', 'Raspberry', 'Peach', 'Pineapple'],
+    price: 5,
   },
   {
     type: 'Pudding',
     flavors: ['Vanilla', 'Chocolate', 'Banana'],
+    price: 5,
   },
 ];
 const frostings = [
@@ -64,63 +65,28 @@ const frostings = [
   },
   { type: 'Cream Cheese' },
 ];
-const toppings = ['Sprinkles', 'White Chocolate Drip', 'Chocolate Drip'];
+const toppings = [
+  { topping: 'Sprinkles', price: 0 },
+  { topping: 'White Chocolate Drip', price: 2 },
+  { topping: 'Chocolate Drip', price: 2 },
+];
 const sizes = [
   { amount: 'Dozen (12)', price: 25 },
   { amount: 'Half Dozen (6)', price: 15 },
 ];
 
 export default function App() {
-  let [updatedPrice, setUpdatedPrice] = useState(230);
-
-
-const calculator = createDecorator(
-  {
-    field: 'minimum', // when minimum changes...
-    updates: {
-      // ...update maximum to the result of this function
-      maximum: (minimumValue, allValues) =>
-        Math.max(minimumValue || 0, allValues.maximum || 0)
-    }
-  },
-  {
-    field: 'maximum', // when maximum changes...
-    updates: {
-      // update minimum to the result of this function
-      minimum: (maximumValue, allValues) =>
-        Math.min(maximumValue || 0, allValues.minimum || 0)
-    }
-  },
-  {
-    field: /day\[\d\]/, // when a field matching this pattern changes...
-    updates: {
-      // ...update the total to the result of this function
-      Price: (ignoredValue, allValues) =>
-        (allValues.Size || [])
-          .reduce((sum, value) => sum + Number(value || 0), 0)
-    }
-  }
-)
-
-const updatePrice = (values) => {
-  console.log(values.target.dataset.price);
-};
-
   const Size = () => {
     let cakeSizes = sizes.map((size, index) => (
-      <option key={index} value={size.amount} data-price={size.price}>
+      <option key={index} value={size.amount} data-price={size.price || 0}>
         {size.amount}
       </option>
     ));
     return (
       <div>
         <label>Number of Cupcakes</label>
-        <Field
-          name="Size"
-          component="select"
-          onChange={test => updatePrice(test)}
-        >
-        <option value="">Select One</option>
+        <Field name="Size" component="select" ref={curSize}>
+          <option value="">Select One</option>
           {cakeSizes}
         </Field>
         <Error name="Size" />
@@ -166,14 +132,14 @@ const updatePrice = (values) => {
 
   const Filling = () => {
     let test = fillings.map((filling, index) => (
-      <option key={index} value={filling.type}>
+      <option key={index} value={filling.type} data-price={filling.price || 0}>
         {filling.type}
       </option>
     ));
     return (
       <div>
         <label>Filling</label>
-        <Field name="Filling" component="select">
+        <Field name="Filling" component="select" ref={curFilling}>
           <option value="">Select One</option>
           {test}
         </Field>
@@ -184,14 +150,18 @@ const updatePrice = (values) => {
 
   const Topping = () => {
     let test = toppings.map((topping, index) => (
-      <option key={index} value={topping}>
-        {topping}
+      <option
+        key={index}
+        value={topping.topping}
+        data-price={topping.price || 0}
+      >
+        {topping.topping}
       </option>
     ));
     return (
       <div>
         <label>Topping</label>
-        <Field name="Topping" component="select">
+        <Field name="Topping" component="select" ref={curTopping}>
           <option value="">Select One</option>
           {test}
         </Field>
@@ -200,23 +170,38 @@ const updatePrice = (values) => {
     );
   };
 
-  const FrostingFlavor = () => {
-    let test = frostings.map((frosting, index) => (
-      <option key={index} value={frosting.type}>
-        {frosting.type}
-      </option>
-    ));
-    return (
-      <div>
-        <label>Frosting Flavor</label>
-        <Field name="FrostingFlavor" component="select">
-          <option value="">Select One</option>
-          {test}
-        </Field>
-        <Error name="FrostingFlavor" />
-      </div>
-    );
-  };
+  const curSize = useRef();
+  const curTopping = useRef();
+  const curFilling = useRef();
+  const calculator = createDecorator({
+    field: 'calcButton',
+    updates: {
+      Price: () => {
+        return (
+          parseInt(
+            curTopping.current.options[curTopping.current.selectedIndex].dataset
+              .price
+              ? curTopping.current.options[curTopping.current.selectedIndex]
+                  .dataset.price
+              : 0
+          ) +
+          parseInt(
+            curSize.current.options[curSize.current.selectedIndex].dataset.price
+              ? curSize.current.options[curSize.current.selectedIndex].dataset
+                  .price
+              : 0
+          ) +
+          parseInt(
+            curFilling.current.options[curFilling.current.selectedIndex].dataset
+              .price
+              ? curFilling.current.options[curFilling.current.selectedIndex]
+                  .dataset.price
+              : 0
+          )
+        );
+      },
+    },
+  });
   return (
     <Styles>
       <h1>Delicious N’ Sweet</h1>
@@ -224,50 +209,39 @@ const updatePrice = (values) => {
       <p>
         Please follow the steps in the wizard to build your perfect cupcake!
       </p>
-      <Wizard initialValues={} onSubmit={onSubmit}>
-        <Wizard.Page
-          validate={(values) => {
-            const errors = {};
-            if (!values.Size) {
-              errors.Size = 'Required';
-            } else if (values.Size.length < 1) {
-              errors.Size = 'Choose more';
-            }
-            return errors;
-          }}
-        >
-          <Size />
-        </Wizard.Page>
-        <Wizard.Page
-          validate={(values) => {
-            const errors = {};
-            if (!values.Flavor) {
-              errors.Flavor = 'Required';
-            } else if (values.Flavor.length < 1) {
-              errors.Flavor = 'Choose more';
-            }
-            return errors;
-          }}
-        >
-          <Flavors />
-        </Wizard.Page>
-        <Wizard.Page>
-          <Filling />
-        </Wizard.Page>
-        <Wizard.Page>
-          <Frosting />
-        </Wizard.Page>
-        <Wizard.Page>
-          <Topping />
-        </Wizard.Page>
-        <Wizard.Page>
-          <div>
-            <label>Notes</label>
-            <Field name="notes" component="textarea" placeholder="Notes" />
-            <Error name="notes" />
-          </div>
-        </Wizard.Page>
-      </Wizard>
+      <Form
+        initialValues={{ Price: 0 }}
+        validate={(foo) => console.log('validating', foo)}
+        onSubmit={onSubmit}
+        decorators={[calculator]}
+        render={({ handleSubmit, reset, submitting, pristine, values }) => (
+          <form onSubmit={handleSubmit}>
+            <Size />
+            <Flavors />
+            <Filling />
+            <Frosting />
+            <Topping />
+            <div>
+              <label>Notes</label>
+              <Field name="notes" component="textarea" placeholder="Notes" />
+              <Error name="notes" />
+            </div>
+            <div className="buttons">
+              <button type="submit" disabled={submitting}>
+                Submit
+              </button>
+              <button
+                type="button"
+                onClick={reset}
+                disabled={submitting || pristine}
+              >
+                Reset
+              </button>
+            </div>
+            <pre>{JSON.stringify(values, 0, 2)}</pre>
+          </form>
+        )}
+      />
     </Styles>
   );
 }
