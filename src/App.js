@@ -5,6 +5,7 @@ import { Form, Field } from 'react-final-form';
 import Wizard from './Wizard';
 import createDecorator from 'final-form-calculate';
 import { sizes, flavors, fillings, frostings, toppings } from './data.js';
+import NumberFormat from 'react-number-format';
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -93,6 +94,7 @@ export default function App() {
         <Field name="Frosting" component="select">
           <option value="">Select One</option>
           {test}
+          <option value="">Skip</option>
         </Field>
         <Error name="Frosting" />
       </div>
@@ -116,6 +118,7 @@ export default function App() {
         >
           <option value="">Select One</option>
           {test}
+          <option value="">Skip</option>
         </Field>
         <Error name="Filling" />
       </div>
@@ -143,6 +146,7 @@ export default function App() {
         >
           <option value="">Select One</option>
           {test}
+          <option value="">Skip</option>
         </Field>
         <Error name="Topping" />
       </div>
@@ -233,7 +237,25 @@ export default function App() {
                 Reset
               </button>
             </div>
-            <pre>{JSON.stringify(values, 0, 2)}</pre>
+            <hr/>
+            <div style={{flexDirection:'column', alignItems: 'flex-end'}}>
+            {values.Size&&<div><strong>Number of Cup Cakes: </strong>{values.Size}</div>}
+            {values.Flavor&&<div>F<strong>lavor: </strong>{values.Flavor}</div>}
+            {values.Filling&&<div>F<strong>illing: </strong>{values.Filling}</div>}
+            {values.Frosting&&<div><strong>Frosting: </strong>{values.Frosting}</div>}
+            {values.Topping&&<div><strong>Topping: </strong>{values.Topping}</div>}
+            {values.notes&&<div><strong>Notes: </strong>{values.notes}</div>}
+            {values.total&&<div><strong>Total: </strong>
+            <NumberFormat
+        value={values.total}
+        displayType="text"
+        thousandSeparator
+        prefix="$"
+        fixedDecimalScale
+        renderText={(value) => <div>{value}</div>}
+      />
+      </div>}
+            </div>
           </form>
         )}
       />
