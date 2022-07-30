@@ -4,6 +4,7 @@ import Styles from './Styles';
 import { Form, Field } from 'react-final-form';
 import Wizard from './Wizard';
 import createDecorator from 'final-form-calculate';
+import {sizes, flavors, fillings, frostings, toppings} from './data.js';
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -23,58 +24,6 @@ const Error = ({ name }) => (
 );
 const required = (value) => (value ? undefined : 'Required');
 
-const flavors = [
-  'Vanilla',
-  'Chocolate',
-  'Confetti',
-  'Strawberry',
-  'Cookies and Cream',
-  'Red Velvet',
-  'Chocolate Chip',
-  'Cinnamon Swirl',
-  'Lemon',
-];
-const fillings = [
-  {
-    type: 'Fruit',
-    flavors: ['Strawberry', 'Blueberry', 'Raspberry', 'Peach', 'Pineapple'],
-    price: 5,
-  },
-  {
-    type: 'Pudding',
-    flavors: ['Vanilla', 'Chocolate', 'Banana'],
-    price: 5,
-  },
-];
-const frostings = [
-  {
-    type: 'American Buttercream',
-    flavors: ['Vanilla', 'Chocolate', 'Lemon', 'Strawberry'],
-  },
-  {
-    type: 'Swiss Meringue',
-    flavors: ['Vanilla', 'Chocolate', 'Lemon', 'Strawberry'],
-  },
-  {
-    type: 'Ganache',
-    flavors: ['White', 'Milk', 'Semi-Sweet ', 'Dark'],
-  },
-  {
-    type: 'Whipped Cream',
-    flavors: ['Vanilla', 'Chocolate', 'Lemon', 'Strawberry'],
-  },
-  { type: 'Cream Cheese' },
-];
-const toppings = [
-  { topping: 'Sprinkles', price: 0 },
-  { topping: 'White Chocolate Drip', price: 2 },
-  { topping: 'Chocolate Drip', price: 2 },
-];
-const sizes = [
-  { amount: 'Dozen (12)', price: 25 },
-  { amount: 'Half Dozen (6)', price: 15 },
-];
-
 export default function App() {
   const Size = () => {
     let cakeSizes = sizes.map((size, index) => (
@@ -85,7 +34,11 @@ export default function App() {
     return (
       <div>
         <label>Number of Cupcakes</label>
-        <Field name="Size" component="select" ref={curSize}>
+        <Field
+          name="Size"
+          component="select"
+          ref={curSize}
+        >
           <option value="">Select One</option>
           {cakeSizes}
         </Field>
@@ -139,7 +92,11 @@ export default function App() {
     return (
       <div>
         <label>Filling</label>
-        <Field name="Filling" component="select" ref={curFilling}>
+        <Field
+          name="Filling"
+          component="select"
+          ref={curFilling}
+        >
           <option value="">Select One</option>
           {test}
         </Field>
@@ -161,7 +118,11 @@ export default function App() {
     return (
       <div>
         <label>Topping</label>
-        <Field name="Topping" component="select" ref={curTopping}>
+        <Field
+          name="Topping"
+          component="select"
+          ref={curTopping}
+        >
           <option value="">Select One</option>
           {test}
         </Field>
@@ -170,38 +131,36 @@ export default function App() {
     );
   };
 
+  const updateVals = () => {
+    let newTotal =
+      parseInt(
+        curTopping.current.options[curTopping.current.selectedIndex].dataset
+          .price
+          ? curTopping.current.options[curTopping.current.selectedIndex].dataset
+              .price
+          : 0
+      ) +
+      parseInt(
+        curSize.current.options[curSize.current.selectedIndex].dataset.price
+          ? curSize.current.options[curSize.current.selectedIndex].dataset.price
+          : 0
+      ) +
+      parseInt(
+        curFilling.current.options[curFilling.current.selectedIndex].dataset
+          .price
+          ? curFilling.current.options[curFilling.current.selectedIndex].dataset
+              .price
+          : 0
+      );
+    curTotal.current.setAttribute('value', newTotal);
+    curTotal.current.dispatchEvent(new Event('change', { bubbles: true }));
+
+    return newTotal;
+  };
   const curSize = useRef();
   const curTopping = useRef();
   const curFilling = useRef();
-  const calculator = createDecorator({
-    field: 'calcButton',
-    updates: {
-      Price: () => {
-        return (
-          parseInt(
-            curTopping.current.options[curTopping.current.selectedIndex].dataset
-              .price
-              ? curTopping.current.options[curTopping.current.selectedIndex]
-                  .dataset.price
-              : 0
-          ) +
-          parseInt(
-            curSize.current.options[curSize.current.selectedIndex].dataset.price
-              ? curSize.current.options[curSize.current.selectedIndex].dataset
-                  .price
-              : 0
-          ) +
-          parseInt(
-            curFilling.current.options[curFilling.current.selectedIndex].dataset
-              .price
-              ? curFilling.current.options[curFilling.current.selectedIndex]
-                  .dataset.price
-              : 0
-          )
-        );
-      },
-    },
-  });
+  const curTotal = useRef();
   return (
     <Styles>
       <h1>Delicious N’ Sweet</h1>
@@ -213,8 +172,14 @@ export default function App() {
         initialValues={{ Price: 0 }}
         validate={(foo) => console.log('validating', foo)}
         onSubmit={onSubmit}
-        decorators={[calculator]}
-        render={({ handleSubmit, reset, submitting, pristine, values }) => (
+        render={({
+          handleSubmit,
+          form,
+          reset,
+          submitting,
+          pristine,
+          values,
+        }) => (
           <form onSubmit={handleSubmit}>
             <Size />
             <Flavors />
@@ -224,6 +189,12 @@ export default function App() {
             <div>
               <label>Notes</label>
               <Field name="notes" component="textarea" placeholder="Notes" />
+              <Field
+                name="total"
+                component="input"
+                placeholder="stuff"
+                ref={curTotal}
+              />
               <Error name="notes" />
             </div>
             <div className="buttons">
@@ -232,10 +203,49 @@ export default function App() {
               </button>
               <button
                 type="button"
-                onClick={reset}
+                onClick={form.reset}
                 disabled={submitting || pristine}
               >
                 Reset
+              </button>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+
+                  let newTotal =
+                    parseInt(
+                      curTopping.current.options[
+                        curTopping.current.selectedIndex
+                      ].dataset.price
+                        ? curTopping.current.options[
+                            curTopping.current.selectedIndex
+                          ].dataset.price
+                        : 0
+                    ) +
+                    parseInt(
+                      curSize.current.options[curSize.current.selectedIndex]
+                        .dataset.price
+                        ? curSize.current.options[curSize.current.selectedIndex]
+                            .dataset.price
+                        : 0
+                    ) +
+                    parseInt(
+                      curFilling.current.options[
+                        curFilling.current.selectedIndex
+                      ].dataset.price
+                        ? curFilling.current.options[
+                            curFilling.current.selectedIndex
+                          ].dataset.price
+                        : 0
+                    );
+                  curTotal.current.setAttribute('value', newTotal);
+                  curTotal.current.dispatchEvent(
+                    new Event('change', { bubbles: true })
+                  );
+                }}
+              >
+                Try
               </button>
             </div>
             <pre>{JSON.stringify(values, 0, 2)}</pre>
