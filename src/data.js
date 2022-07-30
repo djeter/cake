@@ -1,4 +1,4 @@
-const flavors = [
+export const flavors = [
   'Vanilla',
   'Chocolate',
   'Confetti',
@@ -9,7 +9,7 @@ const flavors = [
   'Cinnamon Swirl',
   'Lemon',
 ];
-const fillings = [
+export const fillings = [
   {
     type: 'Fruit',
     flavors: ['Strawberry', 'Blueberry', 'Raspberry', 'Peach', 'Pineapple'],
@@ -21,7 +21,7 @@ const fillings = [
     price: 5,
   },
 ];
-const frostings = [
+export const frostings = [
   {
     type: 'American Buttercream',
     flavors: ['Vanilla', 'Chocolate', 'Lemon', 'Strawberry'],
@@ -40,12 +40,12 @@ const frostings = [
   },
   { type: 'Cream Cheese' },
 ];
-const toppings = [
+export const toppings = [
   { topping: 'Sprinkles', price: 0 },
   { topping: 'White Chocolate Drip', price: 2 },
   { topping: 'Chocolate Drip', price: 2 },
 ];
-const sizes = [
+export const sizes = [
   { amount: 'Dozen (12)', price: 25 },
   { amount: 'Half Dozen (6)', price: 15 },
 ];

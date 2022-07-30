@@ -4,7 +4,7 @@ import Styles from './Styles';
 import { Form, Field } from 'react-final-form';
 import Wizard from './Wizard';
 import createDecorator from 'final-form-calculate';
-import {sizes, flavors, fillings, frostings, toppings} from './data.js';
+import { sizes, flavors, fillings, frostings, toppings } from './data.js';
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -25,6 +25,20 @@ const Error = ({ name }) => (
 const required = (value) => (value ? undefined : 'Required');
 
 export default function App() {
+  const curSize = useRef();
+  const curTopping = useRef();
+  const curFilling = useRef();
+  const curTotal = useRef();
+  const submitButton = useRef();
+  const calcButton = useRef();
+  const disableButton = () => {
+    submitButton.current.setAttribute('disabled', '');
+    calcButton.current.removeAttribute('disabled', true)
+  };
+  const enableButton = () => {
+    submitButton.current.removeAttribute('disabled', 'false');
+    calcButton.current.setAttribute('disabled', '');
+  };
   const Size = () => {
     let cakeSizes = sizes.map((size, index) => (
       <option key={index} value={size.amount} data-price={size.price || 0}>
@@ -38,6 +52,8 @@ export default function App() {
           name="Size"
           component="select"
           ref={curSize}
+          validate={required}
+          onMouseUp={() => disableButton()}
         >
           <option value="">Select One</option>
           {cakeSizes}
@@ -56,7 +72,7 @@ export default function App() {
     return (
       <div>
         <label>Flavor</label>
-        <Field name="Flavor" component="select">
+        <Field name="Flavor" component="select" validate={required}>
           <option value="">Select One</option>
           {test}
         </Field>
@@ -96,6 +112,7 @@ export default function App() {
           name="Filling"
           component="select"
           ref={curFilling}
+          onMouseUp={() => disableButton()}
         >
           <option value="">Select One</option>
           {test}
@@ -122,6 +139,7 @@ export default function App() {
           name="Topping"
           component="select"
           ref={curTopping}
+          onMouseUp={() => disableButton()}
         >
           <option value="">Select One</option>
           {test}
@@ -131,36 +149,6 @@ export default function App() {
     );
   };
 
-  const updateVals = () => {
-    let newTotal =
-      parseInt(
-        curTopping.current.options[curTopping.current.selectedIndex].dataset
-          .price
-          ? curTopping.current.options[curTopping.current.selectedIndex].dataset
-              .price
-          : 0
-      ) +
-      parseInt(
-        curSize.current.options[curSize.current.selectedIndex].dataset.price
-          ? curSize.current.options[curSize.current.selectedIndex].dataset.price
-          : 0
-      ) +
-      parseInt(
-        curFilling.current.options[curFilling.current.selectedIndex].dataset
-          .price
-          ? curFilling.current.options[curFilling.current.selectedIndex].dataset
-              .price
-          : 0
-      );
-    curTotal.current.setAttribute('value', newTotal);
-    curTotal.current.dispatchEvent(new Event('change', { bubbles: true }));
-
-    return newTotal;
-  };
-  const curSize = useRef();
-  const curTopping = useRef();
-  const curFilling = useRef();
-  const curTotal = useRef();
   return (
     <Styles>
       <h1>Delicious N’ Sweet</h1>
@@ -169,7 +157,7 @@ export default function App() {
         Please follow the steps in the wizard to build your perfect cupcake!
       </p>
       <Form
-        initialValues={{ Price: 0 }}
+        initialValues={}
         validate={(foo) => console.log('validating', foo)}
         onSubmit={onSubmit}
         render={({
@@ -194,49 +182,36 @@ export default function App() {
                 component="input"
                 placeholder="stuff"
                 ref={curTotal}
+                style={{ display: 'none' }}
               />
               <Error name="notes" />
             </div>
             <div className="buttons">
-              <button type="submit" disabled={submitting}>
-                Submit
-              </button>
               <button
-                type="button"
-                onClick={form.reset}
-                disabled={submitting || pristine}
-              >
-                Reset
-              </button>
-              <button
+                ref={calcButton}
                 type="button"
                 onClick={(e) => {
                   e.stopPropagation();
-
+                  enableButton();
                   let newTotal =
                     parseInt(
                       curTopping.current.options[
                         curTopping.current.selectedIndex
                       ].dataset.price
-                        ? curTopping.current.options[
-                            curTopping.current.selectedIndex
-                          ].dataset.price
+                        ? toppings[curTopping.current.selectedIndex - 1].price
                         : 0
                     ) +
                     parseInt(
                       curSize.current.options[curSize.current.selectedIndex]
                         .dataset.price
-                        ? curSize.current.options[curSize.current.selectedIndex]
-                            .dataset.price
+                        ? sizes[curSize.current.selectedIndex - 1].price
                         : 0
                     ) +
                     parseInt(
                       curFilling.current.options[
                         curFilling.current.selectedIndex
                       ].dataset.price
-                        ? curFilling.current.options[
-                            curFilling.current.selectedIndex
-                          ].dataset.price
+                        ? fillings[curFilling.current.selectedIndex - 1].price
                         : 0
                     );
                   curTotal.current.setAttribute('value', newTotal);
@@ -245,7 +220,17 @@ export default function App() {
                   );
                 }}
               >
-                Try
+                Calculate Total
+              </button>
+              <button type="submit" disabled={submitting} ref={submitButton}>
+                Submit
+              </button>
+              <button
+                type="button"
+                onClick={form.reset}
+                disabled={submitting || pristine}
+              >
+                Reset
               </button>
             </div>
             <pre>{JSON.stringify(values, 0, 2)}</pre>
