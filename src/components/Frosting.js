@@ -23,7 +23,7 @@ export default function Frosting({
         onClick={() => {
           curFrostingFlavor.current.options[
             curFrostingFlavor.current.selectedIndex
-          ].setAttribute('value', null);
+          ].setAttribute('value', '');
           curFrostingFlavor.current.dispatchEvent(
             new Event('change', { bubbles: true })
           );
