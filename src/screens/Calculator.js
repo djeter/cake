@@ -147,7 +147,7 @@ curTotal.current.dispatchEvent(
             {values.Size&&<div><strong>Number of Cup Cakes: </strong>{values.Size}</div>}
             {values.Flavor&&<div><strong>Flavor: </strong>{values.Flavor}</div>}
             {values.Filling&&<div><strong>Filling: </strong>{values.Filling}</div>}
-            {values.Frosting&&<div><strong>Frosting: </strong>{values.Frosting}{values.FrostingFlavors ? <strong>{values.FrostingFlavors}</strong>: null}</div>}
+            {values.Frosting&&<div><strong>Frosting: </strong>{values.Frosting}{values.Frosting_Flavors ? <strong> ({values.Frosting_Flavors})</strong>: null}</div>}
             {values.Topping&&<div><strong>Topping: </strong>{values.Topping}</div>}
             {values.notes&&<div><strong>Notes: </strong>{values.notes}</div>}
             {values.Quantity_In_Order >= 1 &&<div><strong>Quantity in order: </strong>{values.Quantity_In_Order}</div>}
