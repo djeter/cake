@@ -14,7 +14,7 @@ export default function Frosting({
     </option>
   ));
   return (
-    <div>
+    <>
       <label>Frosting</label>
       <Field
         name="Frosting"
@@ -22,10 +22,6 @@ export default function Frosting({
         ref={curFrosting}
         onClick={() => {
           updatePrice();
-          curFrostingFlavor.current.setAttribute('value', 0);
-          curFrostingFlavor.current.dispatchEvent(
-            new Event('change', { bubbles: true })
-          );
         }}
       >
         <option value="">Select One</option>
@@ -33,6 +29,6 @@ export default function Frosting({
         <option value="">Skip</option>
       </Field>
       <Error name="Frosting" />
-    </div>
+    </>
   );
 }
