@@ -99,7 +99,7 @@ export default styled.div`
       position: relative;
       & > label {
         color: #333;
-        width: 110px;
+        width: 175px;
         min-width: 60px;
         font-size: 1em;
         line-height: 32px;

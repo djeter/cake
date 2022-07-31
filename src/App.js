@@ -169,6 +169,12 @@ curTotal.current.dispatchEvent(
     );
   };
 
+  const required = value => (value ? undefined : 'Required')
+  const mustBeNumber = value => (isNaN(value) ? 'Must be a number' : undefined)
+  const minValue = min => value =>
+    isNaN(value) || value >= min ? undefined : `Should be greater than ${min}`
+  const composeValidators = (...validators) => value =>
+    validators.reduce((error, validator) => error || validator(value), undefined)
   return (
     <Styles>
       <h1>Delicious N’ Sweet</h1>
@@ -208,12 +214,13 @@ curTotal.current.dispatchEvent(
             </div>
               <hr/>
               {values.Size &&
-              <div>
+              <div >
               <label>How many < strong>{values.Size}</strong> would you like?</label>
               <Field
-                name="amount"
+                name='Quantity_In_Order'
                 component="input"
-                placeholder="stuff"
+                type="number"
+                validate={composeValidators(required, mustBeNumber, minValue(1))}
               />
               </div>
               }
@@ -237,7 +244,8 @@ curTotal.current.dispatchEvent(
             {values.Frosting&&<div><strong>Frosting: </strong>{values.Frosting}</div>}
             {values.Topping&&<div><strong>Topping: </strong>{values.Topping}</div>}
             {values.notes&&<div><strong>Notes: </strong>{values.notes}</div>}
-            {values.total&&<div><strong>Total: </strong>${(Math.round(values.total * 100) / 100).toFixed(2)}</div>}
+            {values.Quantity_In_Order >= 1 &&<div><strong>Quantity in order: </strong>{values.Quantity_In_Order}</div>}
+            {values.Quantity_In_Order > 0 && <div><strong>Total: </strong>${(Math.round((values.total * values.Quantity_In_Order) * 100) / 100).toFixed(2)}</div>}
             </div>
           </form>
         )}
