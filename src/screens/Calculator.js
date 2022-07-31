@@ -83,7 +83,7 @@ curTotal.current.dispatchEvent(
       <h1>Delicious N’ Sweet</h1>
       <h2>Cupcake Wizard Form</h2>
       <p>
-        Please follow the steps in the wizard to build your perfect cupcake!
+        Please follow the steps in the wizard to build your perfect cupcake! OK
       </p>
       <Form
         initialValues={}
