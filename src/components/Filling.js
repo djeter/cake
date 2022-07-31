@@ -8,6 +8,7 @@ export default function Filling({ updatePrice, curFilling, Error }) {
       {filling.type}
     </option>
   ));
+
   return (
     <div>
       <label>Filling</label>
