@@ -81,9 +81,9 @@ curTotal.current.dispatchEvent(
   return (
     <Styles>
       <h1>Delicious N’ Sweet</h1>
-      <h2>Cupcake Wizard Form</h2>
+      <h2>Cupcake Order Form</h2>
       <p>
-        Please follow the steps in the wizard to build your perfect cupcake!
+        Please follow the steps below to build your perfect cupcake!
       </p>
       <Form
         initialValues={}
