@@ -24,22 +24,41 @@ const Error = ({ name }) => (
   />
 );
 const required = (value) => (value ? undefined : 'Required');
-
 export default function App() {
   const curSize = useRef();
   const curTopping = useRef();
   const curFilling = useRef();
   const curTotal = useRef();
   const submitButton = useRef();
-  const calcButton = useRef();
-  const disableButton = () => {
-    submitButton.current.setAttribute('disabled', '');
-    calcButton.current.removeAttribute('disabled', true)
-  };
-  const enableButton = () => {
-    submitButton.current.removeAttribute('disabled', 'false');
-    calcButton.current.setAttribute('disabled', '');
-  };
+
+const updatePrice = () => {
+
+  let newTotal =
+  parseInt(
+    curTopping.current.options[
+      curTopping.current.selectedIndex
+    ].dataset.price
+      ? toppings[curTopping.current.selectedIndex - 1].price
+      : 0
+  ) +
+  parseInt(
+    curSize.current.options[curSize.current.selectedIndex]
+      .dataset.price
+      ? sizes[curSize.current.selectedIndex - 1].price
+      : 0
+  ) +
+  parseInt(
+    curFilling.current.options[
+      curFilling.current.selectedIndex
+    ].dataset.price
+      ? fillings[curFilling.current.selectedIndex - 1].price
+      : 0
+  );
+curTotal.current.setAttribute('value', newTotal);
+curTotal.current.dispatchEvent(
+  new Event('change', { bubbles: true })
+);
+}
   const Size = () => {
     let cakeSizes = sizes.map((size, index) => (
       <option key={index} value={size.amount} data-price={size.price || 0}>
@@ -54,8 +73,7 @@ export default function App() {
           component="select"
           ref={curSize}
           validate={required}
-          onMouseUp={() => disableButton()}
-        >
+          onClick={() => updatePrice()}>
           <option value="">Select One</option>
           {cakeSizes}
         </Field>
@@ -114,8 +132,7 @@ export default function App() {
           name="Filling"
           component="select"
           ref={curFilling}
-          onMouseUp={() => disableButton()}
-        >
+          onClick={() => updatePrice()}>
           <option value="">Select One</option>
           {test}
           <option value="">Skip</option>
@@ -142,8 +159,7 @@ export default function App() {
           name="Topping"
           component="select"
           ref={curTopping}
-          onMouseUp={() => disableButton()}
-        >
+          onClick={() => updatePrice()}>
           <option value="">Select One</option>
           {test}
           <option value="">Skip</option>
@@ -190,42 +206,18 @@ export default function App() {
               />
               <Error name="notes" />
             </div>
+              <hr/>
+              {values.Size &&
+              <div>
+              <label>How many < strong>{values.Size}</strong> would you like?</label>
+              <Field
+                name="amount"
+                component="input"
+                placeholder="stuff"
+              />
+              </div>
+              }
             <div className="buttons">
-              <button
-                ref={calcButton}
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  enableButton();
-                  let newTotal =
-                    parseInt(
-                      curTopping.current.options[
-                        curTopping.current.selectedIndex
-                      ].dataset.price
-                        ? toppings[curTopping.current.selectedIndex - 1].price
-                        : 0
-                    ) +
-                    parseInt(
-                      curSize.current.options[curSize.current.selectedIndex]
-                        .dataset.price
-                        ? sizes[curSize.current.selectedIndex - 1].price
-                        : 0
-                    ) +
-                    parseInt(
-                      curFilling.current.options[
-                        curFilling.current.selectedIndex
-                      ].dataset.price
-                        ? fillings[curFilling.current.selectedIndex - 1].price
-                        : 0
-                    );
-                  curTotal.current.setAttribute('value', newTotal);
-                  curTotal.current.dispatchEvent(
-                    new Event('change', { bubbles: true })
-                  );
-                }}
-              >
-                Calculate Total
-              </button>
               <button type="submit" disabled={submitting} ref={submitButton}>
                 Submit
               </button>
@@ -240,21 +232,12 @@ export default function App() {
             <hr/>
             <div style={{flexDirection:'column', alignItems: 'flex-end'}}>
             {values.Size&&<div><strong>Number of Cup Cakes: </strong>{values.Size}</div>}
-            {values.Flavor&&<div>F<strong>lavor: </strong>{values.Flavor}</div>}
-            {values.Filling&&<div>F<strong>illing: </strong>{values.Filling}</div>}
+            {values.Flavor&&<div><strong>Flavor: </strong>{values.Flavor}</div>}
+            {values.Filling&&<div><strong>Filling: </strong>{values.Filling}</div>}
             {values.Frosting&&<div><strong>Frosting: </strong>{values.Frosting}</div>}
             {values.Topping&&<div><strong>Topping: </strong>{values.Topping}</div>}
             {values.notes&&<div><strong>Notes: </strong>{values.notes}</div>}
-            {values.total&&<div><strong>Total: </strong>
-            <NumberFormat
-        value={values.total}
-        displayType="text"
-        thousandSeparator
-        prefix="$"
-        fixedDecimalScale
-        renderText={(value) => <div>{value}</div>}
-      />
-      </div>}
+            {values.total&&<div><strong>Total: </strong>${(Math.round(values.total * 100) / 100).toFixed(2)}</div>}
             </div>
           </form>
         )}
