@@ -3,12 +3,13 @@ import { Field } from 'react-final-form';
 import { frostings } from '../data.js';
 
 export default function FrostingFlavors({
+  updatePrice,
   Error,
   curFrosting,
   curFrostingFlavor,
   idx,
 }) {
-  let test = frostings[idx - 1].map((frosting, index) => (
+  let test = frostings[0].flavors.map((frosting, index) => (
     <option key={index} value={frosting}>
       {frosting}
     </option>

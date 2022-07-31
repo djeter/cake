@@ -2,7 +2,12 @@ import React from 'react';
 import { Field } from 'react-final-form';
 import { frostings } from '../data.js';
 
-export default function Frosting({ Error, curFrosting, curFrostingFlavor }) {
+export default function Frosting({
+  Error,
+  curFrosting,
+  curFrostingFlavor,
+  updatePrice,
+}) {
   let test = frostings.map((frosting, index) => (
     <option key={index} value={frosting.type}>
       {frosting.type}
@@ -11,7 +16,18 @@ export default function Frosting({ Error, curFrosting, curFrostingFlavor }) {
   return (
     <div>
       <label>Frosting</label>
-      <Field name="Frosting" component="select" ref={curFrosting}>
+      <Field
+        name="Frosting"
+        component="select"
+        ref={curFrosting}
+        onClick={() => {
+          updatePrice();
+          curFrostingFlavor.current.setAttribute('value', 0);
+          curFrostingFlavor.current.dispatchEvent(
+            new Event('change', { bubbles: true })
+          );
+        }}
+      >
         <option value="">Select One</option>
         {test}
         <option value="">Skip</option>
