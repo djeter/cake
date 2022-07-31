@@ -1,6 +1,6 @@
 import React from 'react';
 import { Field } from 'react-final-form';
-import { sizes, flavors, fillings, frostings, toppings } from '../data.js';
+import { sizes } from '../data.js';
 
 export default function Size({ updatePrice, curSize, Error, required }) {
   let cakeSizes = sizes.map((size, index) => (

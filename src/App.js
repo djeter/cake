@@ -8,6 +8,9 @@ import { sizes, flavors, fillings, frostings, toppings } from './data.js';
 import NumberFormat from 'react-number-format';
 import Size from './components/Size'
 import Flavors from './components/Flavors'
+import Frosting from './components/Frosting'
+import Filling from './components/Filling'
+import Topping from './components/Topping'
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -25,7 +28,6 @@ const Error = ({ name }) => (
     }
   />
 );
-const required = (value) => (value ? undefined : 'Required');
 export default function App() {
   const curSize = useRef();
   const curTopping = useRef();
@@ -64,74 +66,6 @@ curTotal.current.dispatchEvent(
 
 
 
-  const Frosting = () => {
-    let test = frostings.map((frosting, index) => (
-      <option key={index} value={frosting.type}>
-        {frosting.type}
-      </option>
-    ));
-    return (
-      <div>
-        <label>Frosting</label>
-        <Field name="Frosting" component="select">
-          <option value="">Select One</option>
-          {test}
-          <option value="">Skip</option>
-        </Field>
-        <Error name="Frosting" />
-      </div>
-    );
-  };
-
-  const Filling = () => {
-    let test = fillings.map((filling, index) => (
-      <option key={index} value={filling.type} data-price={filling.price || 0}>
-        {filling.type}
-      </option>
-    ));
-    return (
-      <div>
-        <label>Filling</label>
-        <Field
-          name="Filling"
-          component="select"
-          ref={curFilling}
-          onClick={() => updatePrice()}>
-          <option value="">Select One</option>
-          {test}
-          <option value="">Skip</option>
-        </Field>
-        <Error name="Filling" />
-      </div>
-    );
-  };
-
-  const Topping = () => {
-    let test = toppings.map((topping, index) => (
-      <option
-        key={index}
-        value={topping.topping}
-        data-price={topping.price || 0}
-      >
-        {topping.topping}
-      </option>
-    ));
-    return (
-      <div>
-        <label>Topping</label>
-        <Field
-          name="Topping"
-          component="select"
-          ref={curTopping}
-          onClick={() => updatePrice()}>
-          <option value="">Select One</option>
-          {test}
-          <option value="">Skip</option>
-        </Field>
-        <Error name="Topping" />
-      </div>
-    );
-  };
 
   const required = value => (value ? undefined : 'Required')
   const mustBeNumber = value => (isNaN(value) ? 'Must be a number' : undefined)
@@ -161,9 +95,9 @@ curTotal.current.dispatchEvent(
           <form onSubmit={handleSubmit}>
             <Size updatePrice={updatePrice} curSize={curSize} Error={Error} required={required}/>
             <Flavors updatePrice={updatePrice} Error={Error} required={required}/>
-            <Filling />
-            <Frosting />
-            <Topping />
+            <Filling updatePrice={updatePrice} curFilling={curFilling} Error={Error}/>
+            <Frosting  Error={Error}/>
+            <Topping updatePrice={updatePrice} curTopping={curTopping} Error={Error}/>
             <div>
               <label>Notes</label>
               <Field name="notes" component="textarea" placeholder="Notes" />

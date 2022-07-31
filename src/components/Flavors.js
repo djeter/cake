@@ -1,6 +1,6 @@
 import React from 'react';
 import { Field } from 'react-final-form';
-import { sizes, flavors, fillings, frostings, toppings } from '../data.js';
+import { flavors } from '../data.js';
 
 export default function Flavors({ required, Error }) {
   let test = flavors.map((flavor, index) => (
