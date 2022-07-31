@@ -6,6 +6,8 @@ import Wizard from './Wizard';
 import createDecorator from 'final-form-calculate';
 import { sizes, flavors, fillings, frostings, toppings } from './data.js';
 import NumberFormat from 'react-number-format';
+import Size from './components/Size'
+import Flavors from './components/Flavors'
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -59,46 +61,8 @@ curTotal.current.dispatchEvent(
   new Event('change', { bubbles: true })
 );
 }
-  const Size = () => {
-    let cakeSizes = sizes.map((size, index) => (
-      <option key={index} value={size.amount} data-price={size.price || 0}>
-        {size.amount}
-      </option>
-    ));
-    return (
-      <div>
-        <label>Number of Cupcakes</label>
-        <Field
-          name="Size"
-          component="select"
-          ref={curSize}
-          validate={required}
-          onClick={() => updatePrice()}>
-          <option value="">Select One</option>
-          {cakeSizes}
-        </Field>
-        <Error name="Size" />
-      </div>
-    );
-  };
 
-  const Flavors = () => {
-    let test = flavors.map((flavor, index) => (
-      <option key={index} value={flavor}>
-        {flavor}
-      </option>
-    ));
-    return (
-      <div>
-        <label>Flavor</label>
-        <Field name="Flavor" component="select" validate={required}>
-          <option value="">Select One</option>
-          {test}
-        </Field>
-        <Error name="Flavor" />
-      </div>
-    );
-  };
+
 
   const Frosting = () => {
     let test = frostings.map((frosting, index) => (
@@ -195,8 +159,8 @@ curTotal.current.dispatchEvent(
           values,
         }) => (
           <form onSubmit={handleSubmit}>
-            <Size />
-            <Flavors />
+            <Size updatePrice={updatePrice} curSize={curSize} Error={Error} required={required}/>
+            <Flavors updatePrice={updatePrice} Error={Error} required={required}/>
             <Filling />
             <Frosting />
             <Topping />
