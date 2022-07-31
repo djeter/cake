@@ -8,6 +8,7 @@ export default function FrostingFlavors({
   curFrosting,
   curFrostingFlavor,
   idx,
+  required,
 }) {
   try {
     let test = frostings[idx - 1].flavors.map((frosting, index) => (
@@ -20,6 +21,7 @@ export default function FrostingFlavors({
         <Field
           name="Frosting_Flavors"
           component="select"
+          validate={required}
           ref={curFrostingFlavor}
         >
           <option value="">Select One</option>
