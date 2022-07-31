@@ -21,7 +21,9 @@ export default function Frosting({
         component="select"
         ref={curFrosting}
         onClick={() => {
-          curFrostingFlavor.current.setAttribute('selectedIndex', 0);
+          curFrostingFlavor.current.options[
+            curFrostingFlavor.current.selectedIndex
+          ].setAttribute('value', null);
           curFrostingFlavor.current.dispatchEvent(
             new Event('change', { bubbles: true })
           );
