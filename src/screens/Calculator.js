@@ -10,6 +10,8 @@ import Size from '../components/Size'
 import Flavors from '../components/Flavors'
 import Frosting from '../components/Frosting'
 import Filling from '../components/Filling'
+import FrostingFlavors from '../components/FrostingFlavors'
+import FillingFlavors from '../components/FillingFlavors'
 import Topping from '../components/Topping'
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -100,6 +102,7 @@ curTotal.current.dispatchEvent(
             <Flavors updatePrice={updatePrice} Error={Error} required={required} curFrosting={curFrosting} />
             <Filling updatePrice={updatePrice} curFilling={curFilling} Error={Error}/>
             <Frosting  Error={Error}/>
+            <FrostingFlavors />
             <Topping updatePrice={updatePrice} curTopping={curTopping} Error={Error}/>
             <div>
               <label>Notes</label>
