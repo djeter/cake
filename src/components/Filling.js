@@ -15,7 +15,7 @@ export default function Filling({
   ));
 
   return (
-    <div>
+    <>
       <label>Filling</label>
       <Field
         name="Filling"
@@ -28,6 +28,6 @@ export default function Filling({
         <option value="">Skip</option>
       </Field>
       <Error name="Filling" />
-    </div>
+    </>
   );
 }

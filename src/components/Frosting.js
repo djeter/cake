@@ -21,7 +21,10 @@ export default function Frosting({
         component="select"
         ref={curFrosting}
         onClick={() => {
-          updatePrice();
+          curFrostingFlavor.current.setAttribute('selectedIndex', 0);
+          curFrostingFlavor.current.dispatchEvent(
+            new Event('change', { bubbles: true })
+          );
         }}
       >
         <option value="">Select One</option>

@@ -5,8 +5,8 @@ import { fillings } from '../data.js';
 export default function FillingFlavors({
   updatePrice,
   Error,
-  curFrosting,
-  curFrostingFlavor,
+  curFilling,
+  curFillingFlavor,
   idx,
 }) {
   try {

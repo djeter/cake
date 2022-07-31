@@ -100,7 +100,10 @@ curTotal.current.dispatchEvent(
           <form onSubmit={handleSubmit}>
             <Size updatePrice={updatePrice} curSize={curSize} Error={Error} required={required}/>
             <Flavors updatePrice={updatePrice} Error={Error} required={required} curFrosting={curFrosting} />
+            <div>
             <Filling updatePrice={updatePrice} curFilling={curFilling} Error={Error}/>
+            {values.Filling ? <FillingFlavors  Error={Error}  idx={curFilling.current.selectedIndex} curFilling={curFilling} curFillingFlavor={curFillingFlavor}/> : null}
+            </div>
             <div>
             <Frosting  Error={Error} curFrosting={curFrosting} curFrostingFlavor={curFrostingFlavor} updatePrice={updatePrice}/>
             {values.Frosting ? <FrostingFlavors  Error={Error}  idx={curFrosting.current.selectedIndex} curFrosting={curFrosting} curFrostingFlavor={curFrostingFlavor}/> : null}
@@ -146,7 +149,7 @@ curTotal.current.dispatchEvent(
             <div style={{flexDirection:'column', alignItems: 'flex-end'}}>
             {values.Size&&<div><strong>Number of Cup Cakes: </strong>{values.Size}</div>}
             {values.Flavor&&<div><strong>Flavor: </strong>{values.Flavor}</div>}
-            {values.Filling&&<div><strong>Filling: </strong>{values.Filling}</div>}
+            {values.Filling&&<div><strong>Filling: </strong>{values.Filling}{values.Filling_Flavors ? <strong> ({values.Filling_Flavors})</strong>: null}</div>}
             {values.Frosting&&<div><strong>Frosting: </strong>{values.Frosting}{values.Frosting_Flavors ? <strong> ({values.Frosting_Flavors})</strong>: null}</div>}
             {values.Topping&&<div><strong>Topping: </strong>{values.Topping}</div>}
             {values.notes&&<div><strong>Notes: </strong>{values.notes}</div>}
