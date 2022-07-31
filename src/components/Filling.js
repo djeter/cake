@@ -21,7 +21,17 @@ export default function Filling({
         name="Filling"
         component="select"
         ref={curFilling}
-        onClick={() => updatePrice()}
+        onClick={() => {
+          updatePrice();
+          try {
+            curFillingFlavor.current.options[
+              curFillingFlavor.current.selectedIndex
+            ].setAttribute('value', '');
+            curFillingFlavor.current.dispatchEvent(
+              new Event('change', { bubbles: true })
+            );
+          } catch (err) {}
+        }}
       >
         <option value="">Select One</option>
         {test}

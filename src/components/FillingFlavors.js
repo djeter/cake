@@ -8,6 +8,7 @@ export default function FillingFlavors({
   curFilling,
   curFillingFlavor,
   idx,
+  required,
 }) {
   try {
     let test = fillings[idx - 1].flavors.map((filling, index) => (
@@ -17,7 +18,12 @@ export default function FillingFlavors({
     ));
     return (
       <>
-        <Field name="Filling_Flavors" component="select" ref={curFillingFlavor}>
+        <Field
+          name="Filling_Flavors"
+          component="select"
+          ref={curFillingFlavor}
+          validate={required}
+        >
           <option value="">Select One</option>
           {test}
           <option value="">Skip</option>

@@ -101,8 +101,8 @@ curTotal.current.dispatchEvent(
             <Size updatePrice={updatePrice} curSize={curSize} Error={Error} required={required}/>
             <Flavors updatePrice={updatePrice} Error={Error} required={required} curFrosting={curFrosting} />
             <div>
-            <Filling updatePrice={updatePrice} curFilling={curFilling} Error={Error}/>
-            {values.Filling ? <FillingFlavors  Error={Error}  idx={curFilling.current.selectedIndex} curFilling={curFilling} curFillingFlavor={curFillingFlavor}/> : null}
+            <Filling updatePrice={updatePrice} curFilling={curFilling} Error={Error} curFillingFlavor={curFillingFlavor}/>
+            {values.Filling ? <FillingFlavors  Error={Error}  idx={curFilling.current.selectedIndex} curFilling={curFilling} curFillingFlavor={curFillingFlavor} required={required}/> : null}
             </div>
             <div>
             <Frosting  Error={Error} curFrosting={curFrosting} curFrostingFlavor={curFrostingFlavor} updatePrice={updatePrice}/>
@@ -116,6 +116,7 @@ curTotal.current.dispatchEvent(
                 name="total"
                 component="input"
                 placeholder="stuff"
+                validate={required}
                 ref={curTotal}
                 style={{ display: 'none' }}
               />
@@ -129,6 +130,7 @@ curTotal.current.dispatchEvent(
                 name='Quantity_In_Order'
                 component="input"
                 type="number"
+                defaultValue={1}
                 validate={composeValidators(required, mustBeNumber, minValue(1))}
               />
               </div>

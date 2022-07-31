@@ -21,13 +21,17 @@ export default function Frosting({
         component="select"
         ref={curFrosting}
         onClick={() => {
+          try{
           curFrostingFlavor.current.options[
             curFrostingFlavor.current.selectedIndex
           ].setAttribute('value', '');
           curFrostingFlavor.current.dispatchEvent(
             new Event('change', { bubbles: true })
-          );
-        }}
+          );} catch(err) {
+
+          }
+        }
+      }
       >
         <option value="">Select One</option>
         {test}
