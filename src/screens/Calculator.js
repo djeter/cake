@@ -32,6 +32,9 @@ export default function Calculator() {
   const curSize = useRef();
   const curTopping = useRef();
   const curFilling = useRef();
+  const curFrosting = useRef();
+  const curFillingFlavor = useRef();
+  const curFrostingFlavor = useRef();
   const curTotal = useRef();
   const submitButton = useRef();
 
@@ -94,7 +97,7 @@ curTotal.current.dispatchEvent(
         }) => (
           <form onSubmit={handleSubmit}>
             <Size updatePrice={updatePrice} curSize={curSize} Error={Error} required={required}/>
-            <Flavors updatePrice={updatePrice} Error={Error} required={required}/>
+            <Flavors updatePrice={updatePrice} Error={Error} required={required} curFrosting={curFrosting} />
             <Filling updatePrice={updatePrice} curFilling={curFilling} Error={Error}/>
             <Frosting  Error={Error}/>
             <Topping updatePrice={updatePrice} curTopping={curTopping} Error={Error}/>

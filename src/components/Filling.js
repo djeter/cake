@@ -2,7 +2,12 @@ import React from 'react';
 import { Field } from 'react-final-form';
 import { fillings } from '../data.js';
 
-export default function Filling({ updatePrice, curFilling, Error }) {
+export default function Filling({
+  updatePrice,
+  curFilling,
+  Error,
+  curFillingFlavor,
+}) {
   let test = fillings.map((filling, index) => (
     <option key={index} value={filling.type} data-price={filling.price || 0}>
       {filling.type}
