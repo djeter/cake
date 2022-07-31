@@ -102,7 +102,7 @@ curTotal.current.dispatchEvent(
             <Flavors updatePrice={updatePrice} Error={Error} required={required} curFrosting={curFrosting} />
             <Filling updatePrice={updatePrice} curFilling={curFilling} Error={Error}/>
             <Frosting  Error={Error}/>
-            <FrostingFlavors />
+            {curFrosting.current ? <FrostingFlavors idx={curFrosting.current.selectedIndex} curFrosting={curFrosting} curFrostingFlavor={curFrostingFlavor}/> : null}
             <Topping updatePrice={updatePrice} curTopping={curTopping} Error={Error}/>
             <div>
               <label>Notes</label>
