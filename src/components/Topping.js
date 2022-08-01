@@ -19,7 +19,7 @@ export default function ({ updatePrice, curTopping, Error }) {
       >
         <option value="">Select One</option>
         {test}
-        <option value="">Skip</option>
+        <option value="none">Skip</option>
       </Field>
       <Error name="Topping" />
     </div>

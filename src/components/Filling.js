@@ -35,7 +35,7 @@ export default function Filling({
       >
         <option value="">Select One</option>
         {test}
-        <option value="">Skip</option>
+        <option value="none">Skip</option>
       </Field>
       <Error name="Filling" />
     </>
